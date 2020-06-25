@@ -4,11 +4,13 @@ gap_time = 10  # gap time between each segment
 win_size = [10, 30, 60]  # window size of each segment
 step_max = 5 # maximum step of ConvLSTM
 
-raw_data_path = '../data/synthetic_data_with_anomaly-s-1.csv'  # path to load raw data
-model_path = '../MSCRED/'
-train_data_path = "../data/train/"
-test_data_path = "../data/test/"
-reconstructed_data_path = "../data/reconstructed/"
+path = 'C:/Users/Andrej Lejman/OneDrive/Studium/Dokumente/Bachelorarbeit/Ressourcen/Anomalieerkennung/Code/MSCRED/MSCRED-2/MSCRED-2/'
+
+raw_data_path = path + 'data/synthetic_data_with_anomaly-s-1.csv'  # path to load raw data
+model_path = path + 'MSCRED/'
+train_data_path = path + "data/train/"
+test_data_path = path + "data/test/"
+reconstructed_data_path = path + "data/reconstructed/"
 
 
 train_start_id = 10
