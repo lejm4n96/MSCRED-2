@@ -12,6 +12,8 @@ train_data_path = path + "data/train/"
 test_data_path = path + "data/test/"
 reconstructed_data_path = path + "data/reconstructed/"
 
+root_cause_f_path = path + 'data/test_anomaly.csv'
+
 
 train_start_id = 10
 train_end_id = 800

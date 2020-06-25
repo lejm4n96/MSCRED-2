@@ -24,7 +24,7 @@ valid_len = util.valid_end_id - util.valid_start_id
 # compute the threshold, threshold = alpha * max{s(t)} , s(t) is the anomaly scores over validation period.
 for i in range(util.valid_end_id - util.valid_start_id):
 	error = np.square(np.subtract(test_data[i, ..., 0], reconstructed_data[i, ..., 0]))
-	num_anom = len(np.where(error > util.threhold))
+	num_anom = len(np.where(error > util.threhold)[0])
 	valid_anomaly_score[i] = num_anom
 
 max_valid_anom = np.max(valid_anomaly_score)
@@ -36,7 +36,7 @@ print("Threshold is %.2f" % threshold)
 # compute the anomaly score in the test data.
 for i in range(util.test_end_id - util.valid_end_id):
 	error = np.square(np.subtract(test_data[i, ..., 0], reconstructed_data[i, ..., 0]))
-	num_anom = len(np.where(error > threshold))
+	num_anom = len(np.where(error > util.threhold)[0])
 	test_anomaly_score[i - valid_len] = num_anom
 
 # plot anomaly score curve and identification result
@@ -46,7 +46,7 @@ anomaly_span = [10, 30, 90]
 
 # Read the test_anomaly.csv, each line behalf of an anomaly, the first is the position, the next three number is the
 # root cause.
-root_cause_f = open("../data/test_anomaly.csv", "r")
+root_cause_f = open(util.root_cause_f_path, "r")
 
 root_cause_gt = np.loadtxt(root_cause_f, delimiter=",", dtype=np.int32)
 anomaly_pos = root_cause_gt[:, 0]
@@ -58,8 +58,8 @@ for i in range(5):
 fig, axes = plt.subplots()
 test_num = util.test_end_id - util.test_start_id
 plt.xticks(fontsize = 25)
-plt.ylim((0, 100))
-plt.yticks(np.arange(0, 101, 20), fontsize = 25)
+plt.ylim((0, 2000))
+#plt.yticks(np.arange(0, 50, 20), fontsize = 25)
 plt.plot(test_anomaly_score, 'b', linewidth = 2)
 threshold = np.full((test_num), max_valid_anom * util.alpha)
 axes.plot(threshold, color = 'black', linestyle = '--',linewidth = 2)
