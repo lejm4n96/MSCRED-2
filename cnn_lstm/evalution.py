@@ -16,14 +16,44 @@ reconstructed_data_path = os.path.join(reconstructed_data_path, "test_reconstruc
 test_data = np.load(test_data_path)
 test_data = test_data[:, -1, ...]  # only compare the last matrix with the reconstructed data
 reconstructed_data = np.load(reconstructed_data_path)
+
+
 print("The shape of test data is {}".format(test_data.shape))
 print("The shape of reconstructed data is {}".format(reconstructed_data.shape))
 
 valid_len = util.valid_end_id - util.valid_start_id
+from mpl_toolkits.axes_grid1.inset_locator import InsetPosition
 
 # compute the threshold, threshold = alpha * max{s(t)} , s(t) is the anomaly scores over validation period.
 for i in range(util.valid_end_id - util.valid_start_id):
+
+	test_pic = test_data[i, ..., 0]
+	reconstructed_pic = reconstructed_data[i, ..., 0]
+
 	error = np.square(np.subtract(test_data[i, ..., 0], reconstructed_data[i, ..., 0]))
+
+	fig, (ax, ax2, ax3, cax) = plt.subplots(ncols=4,figsize=(7,3), 
+                  gridspec_kw={"width_ratios":[1, 1, 1, 0.05]})
+
+	fig.subplots_adjust(wspace=0.2)
+
+	im = ax.imshow(test_pic)
+	ax.set_title('test data')
+
+	im2 = ax2.imshow(reconstructed_pic)
+	ax2.set_title('reconstructed data')
+
+	im3 = ax3.imshow(error)
+	ax3.set_title('error')
+
+	ip = InsetPosition(ax3, [1.05,0,0.05,1]) 
+	cax.set_axes_locator(ip)
+
+	fig.colorbar(im3, cax = cax, ax = [ax, ax2, ax3])
+
+	plt.show()
+
+
 	num_anom = len(np.where(error > util.threhold)[0])
 	valid_anomaly_score[i] = num_anom
 
